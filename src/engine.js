@@ -55,6 +55,16 @@
     return node;
   }
 
+  function speakerFor(lineText) {
+    var m = /^OVERSEER AI:\s*/.exec(lineText);
+    if (m) {
+      var rest = lineText.slice(m[0].length);
+      var quoted = /^'(.*)'$/.exec(rest);
+      return { id: "overseer", name: "OVERSEER AI", text: quoted ? quoted[1] : rest };
+    }
+    return { id: "you", name: null, text: lineText };
+  }
+
   function renderImage(wrap, node) {
     var img = document.createElement("img");
     img.src = node.image;
@@ -111,14 +121,24 @@
     renderImage(imgWrap, node);
     panel.appendChild(imgWrap);
 
-    var dialogue = el("div", "dialogue");
-    if (node.speaker) {
-      dialogue.appendChild(el("div", "speaker", node.speaker));
-    }
     var lines = node.lines || [];
-    var lineText = lines.length ? lines[Math.min(state.lineIndex, lines.length - 1)] : "";
-    dialogue.appendChild(el("p", "line", lineText));
-    panel.appendChild(dialogue);
+    var thread = el("div", "chat-thread");
+    if (node.speaker) {
+      thread.appendChild(el("div", "speaker", node.speaker));
+    }
+    for (var i = 0; i <= Math.min(state.lineIndex, lines.length - 1); i++) {
+      var msg = speakerFor(lines[i]);
+      var row = el("div", "msg-row msg-" + msg.id);
+      row.appendChild(el("div", "avatar avatar-" + msg.id));
+      var bubble = el("div", "bubble");
+      if (msg.name) {
+        bubble.appendChild(el("div", "bubble-name", msg.name));
+      }
+      bubble.appendChild(el("div", "bubble-text", msg.text));
+      row.appendChild(bubble);
+      thread.appendChild(row);
+    }
+    panel.appendChild(thread);
 
     var controls = el("div", "controls");
     var isLastLine = state.lineIndex >= lines.length - 1;
@@ -179,14 +199,7 @@
     panel.appendChild(controls);
     app.appendChild(panel);
 
-    if (lines.length > 1) {
-      var dots = el("div", "progress-dots");
-      lines.forEach(function (_, i) {
-        var dot = el("span", i <= state.lineIndex ? "active" : "");
-        dots.appendChild(dot);
-      });
-      app.appendChild(dots);
-    }
+    thread.scrollTop = thread.scrollHeight;
   }
 
   function renderVideo(node) {

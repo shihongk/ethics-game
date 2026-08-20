@@ -37,12 +37,29 @@ advance through `lines`; after the last line, auto-advances to `next`.
 }
 ```
 
-`speaker` is optional — omit or set `null` for narration, set a name string
-for dialogue (renders as a chat bubble with that name). For a node that mixes
-narration and one recurring character's lines (like the Overseer AI), it's
-simpler to leave `speaker` null and embed the attribution in the line itself,
-e.g. `"OVERSEER AI: 'Power reserves critical.'"`, than to switch `speaker`
-line-by-line — the schema only supports one speaker per node.
+`speaker` is optional and rarely used — it labels the whole node, not a
+single line, and most content doesn't need it (see below).
+
+**Lines render as a chat thread**, not a single swapped-out paragraph: each
+click appends the next line as a bubble rather than replacing the previous
+one, and the whole history for the current node stays visible (scrollable
+once it overflows). The engine parses each line's *text* to decide who's
+"talking," not the node-level `speaker` field:
+
+- A line matching `^OVERSEER AI: '...'$` renders as an incoming bubble
+  (left-aligned, dark avatar, "OVERSEER AI" name label), with the quoted
+  text shown and the `OVERSEER AI:` prefix/quotes stripped.
+- Every other line renders as an outgoing "you" bubble (right-aligned, amber,
+  Scrap-E-style avatar) — this covers both narration ("The junkyard hums...")
+  and anything else, since most lines in this engine are written from the
+  player-character's POV.
+
+This means the `OVERSEER AI: '...'` convention is load-bearing now, not just
+a stylistic habit — get the exact format right (`OVERSEER AI: ` followed by
+a single-quoted string) or the line will render as an outgoing bubble
+instead of an incoming one. If a scenario needs a second named speaker
+besides "you" and one recurring NPC, `speakerFor()` in `src/engine.js` needs
+a real update, not a content-only workaround.
 
 ### `choice`
 
