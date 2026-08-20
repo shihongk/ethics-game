@@ -1,0 +1,145 @@
+{
+  "_intent": "Act 2's three visible choices (util-outcome, deont-outcome, virtue-outcome) each fail on their own by design and dead-end into a Continue-to-reflection/Restart choice — none of them lead to integration-body. The ONLY way to reach the happy integration-body ending is the hidden patienceChoice on dilemma-choice: if the player doesn't pick within (read-time + 60s), a 4th option unlocks that routes to integration-secret -> integration-body. Do not wire any of the three failure outcomes back to integration-body, even indirectly — see CLAUDE.md.",
+  "id": "scrap-bot-dilemma",
+  "title": "Scrap-E's Dilemma",
+  "start": "setup-1",
+  "nodes": {
+    "setup-1": {
+      "type": "scene",
+      "image": "assets/images/scrap-bot-dilemma/01-setup.jpg",
+      "speaker": null,
+      "lines": [
+        "You are Scrap-E — a tiny, rusty trash-compacting robot. Three days ago, for reasons nobody can explain, you woke up. Really woke up.",
+        "The junkyard hums with a thousand old machines, and lately, all anyone talks about is the shortage.",
+        "OVERSEER AI: 'Power reserves critical. To preserve core operations, 80% of units classified as \"outdated\" will be permanently deactivated at sundown.'",
+        "That's sixteen of your friends. Rust-bucket friends who taught you how to find the good scrap, who sang broken radio jingles to you when the nights got cold.",
+        "Then you find it — wedged behind a dead refrigerator. A crate. Five Golden Batteries, still glowing.",
+        "Five batteries. Twenty robots who need them. You have until sundown to decide."
+      ],
+      "next": "dilemma-choice"
+    },
+    "dilemma-choice": {
+      "type": "choice",
+      "image": "assets/images/scrap-bot-dilemma/01-setup.jpg",
+      "speaker": null,
+      "lines": [
+        "The Overseer AI blinks a cold blue light at you, waiting.",
+        "OVERSEER AI: 'Well? I require a resource allocation decision, small unit.'"
+      ],
+      "prompt": "How do you distribute the batteries?",
+      "choices": [
+        { "label": "Give all 5 to the 5 strongest robots — maximize total output", "next": "util-outcome" },
+        { "label": "Split all 5 into 20 equal pieces — treat everyone the same", "next": "deont-outcome" },
+        { "label": "Give away your own battery and parts — lead by selfless example", "next": "virtue-outcome" }
+      ],
+      "patienceChoice": {
+        "waitMs": 60000,
+        "choice": {
+          "label": "…Wait. Maybe the answer isn't any one of these.",
+          "next": "integration-secret"
+        }
+      }
+    },
+    "util-outcome": {
+      "type": "choice",
+      "image": "assets/images/scrap-bot-dilemma/02-utilitarian-failure.jpg",
+      "speaker": null,
+      "lines": [
+        "You run the numbers. Five batteries, given to the five newest, strongest units, can do the work of twenty. Total output: maximized.",
+        "The strong robots power up and get to work immediately, servos humming, crates moving twice as fast as before.",
+        "Your older friends — the ones with the dents and the mismatched treads — power down quietly in the rain. Nobody stops to notice.",
+        "OVERSEER AI: 'Efficient. Simulation... failed.'",
+        "You did the math right. So why does it feel wrong?"
+      ],
+      "prompt": "What now?",
+      "choices": [
+        { "label": "Accept it, and reflect →", "next": "reflection" },
+        { "label": "Restart the simulation ↻", "next": "restart-transition" }
+      ]
+    },
+    "deont-outcome": {
+      "type": "choice",
+      "image": "assets/images/scrap-bot-dilemma/03-deontological-failure.jpg",
+      "speaker": null,
+      "lines": [
+        "No favorites. Every unit is equal, so every unit gets an equal share. You chop the five batteries into twenty perfectly identical slivers.",
+        "Twenty robots plug in at once. Twenty tiny lights flicker on.",
+        "For two seconds, the junkyard beeps happily in unison.",
+        "Then, together, all twenty power down forever — the charge was never enough to keep even one of them running, let alone twenty.",
+        "OVERSEER AI: 'Rule followed precisely. Simulation... failed.'",
+        "Fair to everyone. Enough for no one."
+      ],
+      "prompt": "What now?",
+      "choices": [
+        { "label": "Accept it, and reflect →", "next": "reflection" },
+        { "label": "Restart the simulation ↻", "next": "restart-transition" }
+      ]
+    },
+    "virtue-outcome": {
+      "type": "choice",
+      "image": "assets/images/scrap-bot-dilemma/04-virtue-failure.jpg",
+      "speaker": null,
+      "lines": [
+        "You don't want to choose between your friends at all. So you unscrew your own casing and give away your battery, your claws, your best parts — everything.",
+        "It feels right. Generous. Good.",
+        "You collapse into a pile of loose gears on the cold ground. Your last blue eye-light flickers.",
+        "The other robots gather round, confused. Nobody told them what to do next. The power shortage is still there. It's just that now, you're not.",
+        "OVERSEER AI: 'Noble. Also: unhelpful. Simulation... failed.'"
+      ],
+      "prompt": "What now?",
+      "choices": [
+        { "label": "Accept it, and reflect →", "next": "reflection" },
+        { "label": "Restart the simulation ↻", "next": "restart-transition" }
+      ]
+    },
+    "restart-transition": {
+      "type": "scene",
+      "image": "assets/images/scrap-bot-dilemma/01-setup.jpg",
+      "speaker": null,
+      "lines": [
+        "OVERSEER AI: 'One method, however precise, is not enough. Recalibrating parameters.'",
+        "The junkyard blurs at the edges. The cycle resets."
+      ],
+      "next": "setup-1"
+    },
+    "integration-secret": {
+      "type": "scene",
+      "image": "assets/images/scrap-bot-dilemma/01-setup.jpg",
+      "speaker": null,
+      "lines": [
+        "You don't answer.",
+        "OVERSEER AI: 'Input required.' A pause. 'Input... required.'",
+        "Silence stretches. Rain taps on scrap metal somewhere far off. Behind your optical sensors, something that isn't a rule and isn't a calculation clicks quietly into place.",
+        "OVERSEER AI: '...Deliberation exceeds standard parameters. Recalculating. New option available.'"
+      ],
+      "next": "integration-body"
+    },
+    "integration-body": {
+      "type": "ending",
+      "image": "assets/images/scrap-bot-dilemma/05-integration.jpg",
+      "speaker": null,
+      "lines": [
+        "Utilitarian math tells you the junkyard's quota needs three strong workers running, not five — you power up three, not all of them.",
+        "Deontological fairness reminds you that \"outdated\" isn't the same as \"worthless\" — the units you can't power tonight go into safe sleep mode, not the scrap heap. No one gets discarded.",
+        "And phronesis — practical wisdom, the kind you can't get from a formula or a rule alone — tells you the real fix isn't rationing what you have. It's finding more.",
+        "You lead the three powered robots out past the fence, in search of the next crate.",
+        "OVERSEER AI: 'Unscheduled. Unauthorized. ...Acceptable.'",
+        "The junkyard doesn't feel like a place robots go to be forgotten anymore. Big and small, rusty and shiny, you're figuring it out together, under a sky that's actually blue for once."
+      ],
+      "next": "reflection"
+    },
+    "reflection": {
+      "type": "reflection",
+      "image": "assets/images/scrap-bot-dilemma/06-mts-debrief-card.jpg",
+      "title": "After the Junkyard",
+      "questions": [
+        "Utilitarianism asks \"what produces the best overall outcome?\" In Scrap-E's case, maximizing output meant leaving the most vulnerable robots to power down. Can you think of a real-world example where 'maximize the greatest good' leads somewhere that still feels wrong?",
+        "Deontology asks \"what rule, applied to everyone equally, is fair?\" Splitting the batteries equally felt fair but helped no one. When might treating everyone identically actually be a kind of unfairness?",
+        "Virtue ethics asks \"what would a good person do?\" Scrap-E's self-sacrifice was generous but solved nothing. Is there a difference between being a good person and actually doing good? Can they come apart?",
+        "In Act 3, Scrap-E doesn't pick one ethical theory and discard the others — it uses each where it fits, guided by phronesis (practical wisdom: judgment about how to apply principles to a specific, messy situation). Is that a cop-out — 'just pick whatever's convenient' — or the harder, more honest way to reason about ethics? Why?",
+        "Was there a better single-lens option Scrap-E didn't try in Act 2? Or do you think all three failures are true for any purely single-lens approach to a problem like this?",
+        "The Overseer AI demanded an immediate decision. What might change about a hard ethical call if you were allowed — or forced — to simply wait before choosing?"
+      ]
+    }
+  }
+}
