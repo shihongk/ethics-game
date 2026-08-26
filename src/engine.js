@@ -60,9 +60,9 @@
     if (m) {
       var rest = lineText.slice(m[0].length);
       var quoted = /^'(.*)'$/.exec(rest);
-      return { id: "overseer", name: "OVERSEER AI", text: quoted ? quoted[1] : rest };
+      return { type: "chat", id: "overseer", name: "OVERSEER AI", text: quoted ? quoted[1] : rest };
     }
-    return { id: "you", name: null, text: lineText };
+    return { type: "narration", text: lineText };
   }
 
   function renderImage(wrap, node) {
@@ -121,6 +121,8 @@
     renderImage(imgWrap, node);
     panel.appendChild(imgWrap);
 
+    var content = el("div", "panel-content");
+
     var lines = node.lines || [];
     var thread = el("div", "chat-thread");
     if (node.speaker) {
@@ -128,17 +130,21 @@
     }
     for (var i = 0; i <= Math.min(state.lineIndex, lines.length - 1); i++) {
       var msg = speakerFor(lines[i]);
-      var row = el("div", "msg-row msg-" + msg.id);
-      row.appendChild(el("div", "avatar avatar-" + msg.id));
-      var bubble = el("div", "bubble");
-      if (msg.name) {
-        bubble.appendChild(el("div", "bubble-name", msg.name));
+      if (msg.type === "chat") {
+        var row = el("div", "msg-row msg-" + msg.id);
+        row.appendChild(el("div", "avatar avatar-" + msg.id));
+        var bubble = el("div", "bubble");
+        if (msg.name) {
+          bubble.appendChild(el("div", "bubble-name", msg.name));
+        }
+        bubble.appendChild(el("div", "bubble-text", msg.text));
+        row.appendChild(bubble);
+        thread.appendChild(row);
+      } else {
+        thread.appendChild(el("p", "narration-line", msg.text));
       }
-      bubble.appendChild(el("div", "bubble-text", msg.text));
-      row.appendChild(bubble);
-      thread.appendChild(row);
     }
-    panel.appendChild(thread);
+    content.appendChild(thread);
 
     var controls = el("div", "controls");
     var isLastLine = state.lineIndex >= lines.length - 1;
@@ -196,7 +202,8 @@
       controls.appendChild(advanceBtn);
     }
 
-    panel.appendChild(controls);
+    content.appendChild(controls);
+    panel.appendChild(content);
     app.appendChild(panel);
 
     thread.scrollTop = thread.scrollHeight;
