@@ -90,6 +90,7 @@
     state.patienceTimerStarted = false;
     state.patienceTimerId = null;
     render();
+    window.scrollTo(0, 0);
   }
 
   function currentNode() {
