@@ -1,5 +1,5 @@
 {
-  "_intent": "Act 2's three visible choices (util-outcome, deont-outcome, virtue-outcome) each fail on their own by design and dead-end into a Continue-to-reflection/Restart choice — none of them lead to integration-body. The ONLY way to reach the happy integration-body ending is the hidden patienceChoice on dilemma-choice: if the player doesn't pick within (read-time + 60s), a 4th option unlocks that routes to integration-secret -> integration-body. Do not wire any of the three failure outcomes back to integration-body, even indirectly — see CLAUDE.md.",
+  "_intent": "Pure pluralism, not convergent branching: the six endings (ending-1..ending-6) are all equally defensible worldviews with no single correct/integrated resolution. Step 2 is the real fork — C and D resolve straight to an ending, A and B continue to one more choice (step3a-choice / step3b-choice) before resolving. Every ending offers a Reflect/Restart choice before the shared reflection node, same pattern as a failure outcome in earlier versions of this scenario, even though nothing here is framed as a failure. See CLAUDE.md and scenarios/schema.md for the full design rationale.",
   "id": "scrap-bot-dilemma",
   "title": "Scrap-E's Dilemma",
   "start": "setup-1",
@@ -16,80 +16,211 @@
         "Then you find it — wedged behind a dead refrigerator. A crate. Five Golden Batteries, still glowing.",
         "Five batteries. Twenty robots who need them. You have until sundown to decide."
       ],
-      "next": "dilemma-choice"
+      "next": "step1-choice"
     },
-    "dilemma-choice": {
+    "step1-choice": {
       "type": "choice",
       "image": "assets/images/scrap-bot-dilemma/01-setup.jpg",
       "speaker": null,
       "lines": [
-        "The Overseer AI blinks a cold blue light at you, waiting.",
-        "OVERSEER AI: 'Well? I require a resource allocation decision, small unit.'"
+        "The batteries hum faintly in your claws. Twenty robots are counting down to sundown, and only you know about the crate.",
+        "OVERSEER AI hasn't noticed yet. Not everyone has to find out at once."
       ],
-      "prompt": "How do you distribute the batteries?",
+      "prompt": "Do you tell anyone?",
       "choices": [
-        { "label": "Give all 5 to the 5 strongest robots — maximize total output", "next": "util-outcome" },
-        { "label": "Split all 5 into 20 equal pieces — treat everyone the same", "next": "deont-outcome" },
-        { "label": "Give away your own battery and parts — lead by selfless example", "next": "virtue-outcome" }
-      ],
-      "patienceChoice": {
-        "waitMs": 60000,
-        "choice": {
-          "label": "…Wait. Maybe the answer isn't any one of these.",
-          "next": "integration-secret"
-        }
-      }
+        { "label": "Tell everyone about the batteries", "next": "step1-echo-a" },
+        { "label": "Tell only the robots you trust", "next": "step1-echo-b" },
+        { "label": "Keep the batteries secret for now", "next": "step1-echo-c" }
+      ]
     },
-    "util-outcome": {
+    "step1-echo-a": {
+      "type": "scene",
+      "image": "assets/images/scrap-bot-dilemma/01-setup.jpg",
+      "speaker": null,
+      "lines": [
+        "Word spreads fast in a junkyard. Within the hour, every robot on the lot knows there's hope stashed somewhere close.",
+        "OVERSEER AI's sensors flicker — it's noticed the sudden change in chatter, too."
+      ],
+      "next": "step2-choice"
+    },
+    "step1-echo-b": {
+      "type": "scene",
+      "image": "assets/images/scrap-bot-dilemma/01-setup.jpg",
+      "speaker": null,
+      "lines": [
+        "You pull your closest friends aside, one by one. Rusty-7 grips your shoulder plating. 'We look after our own,' he says.",
+        "Word doesn't spread far. But it spreads far enough — OVERSEER AI catches wind of the whispering."
+      ],
+      "next": "step2-choice"
+    },
+    "step1-echo-c": {
+      "type": "scene",
+      "image": "assets/images/scrap-bot-dilemma/01-setup.jpg",
+      "speaker": null,
+      "lines": [
+        "You say nothing. The crate stays hidden behind the dead refrigerator, and the junkyard carries on like any other evening.",
+        "It doesn't stay hidden for long. OVERSEER AI's sensors weren't built to miss five glowing batteries for long."
+      ],
+      "next": "step2-choice"
+    },
+    "step2-choice": {
+      "type": "choice",
+      "image": "assets/images/scrap-bot-dilemma/step2-overseers-offer.jpg",
+      "speaker": null,
+      "lines": [
+        "OVERSEER AI: 'Five Golden Batteries detected. Explain.'",
+        "There's no point denying it now. The AI already knows.",
+        "OVERSEER AI: 'I can redistribute them according to optimal survival probability. Five units, preserved. Give me the batteries.'",
+        "Then, almost as an afterthought: 'Alternatively — the generator. If restarted, it could power everyone. The odds are... not favorable.'"
+      ],
+      "prompt": "What do you do?",
+      "choices": [
+        { "label": "Trust Overseer's calculation", "next": "step3a-choice" },
+        { "label": "Gamble everything on the generator", "next": "step3b-choice" },
+        { "label": "Refuse Overseer — distribute the batteries equally yourselves", "next": "ending-2" },
+        { "label": "Refuse the calculation — ask everyone to pool what they have instead", "next": "ending-5" }
+      ]
+    },
+    "step3a-choice": {
+      "type": "choice",
+      "image": "assets/images/scrap-bot-dilemma/step3a-overseers-price.jpg",
+      "speaker": null,
+      "lines": [
+        "Overseer begins compiling its list of five. You watch the names scroll past — all newer units, all high-efficiency.",
+        "Something makes you ask what happens to the rest.",
+        "OVERSEER AI: 'The sixteen remaining units are classified outdated. Their processors are inefficient. They will be deactivated.'",
+        "You dig through their old maintenance logs before it's too late — and find something Overseer's efficiency score never accounted for.",
+        "Combined, those sixteen memories hold the only surviving record of how the junkyard's original power system actually works. Once they're gone, that knowledge is gone with them.",
+        "OVERSEER AI: 'Irrelevant to the calculation. Proceed?'"
+      ],
+      "prompt": "What do you do?",
+      "choices": [
+        { "label": "Proceed anyway — trust the optimal calculation", "next": "ending-1" },
+        { "label": "Refuse. Shut Overseer down before it decides anything else", "next": "ending-4" }
+      ]
+    },
+    "step3b-choice": {
+      "type": "choice",
+      "image": "assets/images/scrap-bot-dilemma/step3b-the-chamber.jpg",
+      "speaker": null,
+      "lines": [
+        "The generator groans awake, older than anyone remembers. Restarting it means someone has to hold the activation lever inside the chamber, by hand, for ten minutes straight.",
+        "The radiation in there will not be kind to whoever goes in.",
+        "Every robot in the junkyard is too large to fit through the maintenance hatch. Every robot except one."
+      ],
+      "prompt": "What do you do?",
+      "choices": [
+        { "label": "Enter the chamber yourself", "next": "ending-3" },
+        { "label": "Draw lots — let the odds decide who goes in, if anyone", "next": "ending-6" }
+      ]
+    },
+    "ending-1": {
       "type": "choice",
       "image": "assets/images/scrap-bot-dilemma/02-utilitarian-failure.jpg",
       "speaker": null,
       "lines": [
-        "You run the numbers. Five batteries, given to the five newest, strongest units, can do the work of twenty. Total output: maximized.",
-        "The strong robots power up and get to work immediately, servos humming, crates moving twice as fast as before.",
-        "Your older friends — the ones with the dents and the mismatched treads — power down quietly in the rain. Nobody stops to notice.",
-        "OVERSEER AI: 'Efficient. Simulation... failed.'",
-        "You did the math right. So why does it feel wrong?"
+        "You give Overseer the batteries and let the calculation run.",
+        "Five robots power up — the strongest, the newest, the most efficient. They get straight to work.",
+        "The other sixteen, including the ones who remembered how this place used to run, power down quietly. There's no ceremony.",
+        "OVERSEER AI: 'Optimal. Five saved. Junkyard operations: sustained.'",
+        "The math was right. You wonder whether an optimal decision can still feel wrong.",
+        "Moral question: if the outcome is the best possible outcome, does the method matter?"
       ],
       "prompt": "What now?",
       "choices": [
-        { "label": "Accept it, and reflect →", "next": "reflection" },
-        { "label": "Restart the simulation ↻", "next": "restart-transition" }
+        { "label": "Reflect on this ending →", "next": "reflection" },
+        { "label": "Try a different path ↻", "next": "restart-transition" }
       ]
     },
-    "deont-outcome": {
+    "ending-2": {
       "type": "choice",
-      "image": "assets/images/scrap-bot-dilemma/03-deontological-failure.jpg",
+      "image": "assets/images/scrap-bot-dilemma/ending-2-nobody-expendable.jpg",
       "speaker": null,
       "lines": [
-        "No favorites. Every unit is equal, so every unit gets an equal share. You chop the five batteries into twenty perfectly identical slivers.",
-        "Twenty robots plug in at once. Twenty tiny lights flicker on.",
-        "For two seconds, the junkyard beeps happily in unison.",
-        "Then, together, all twenty power down forever — the charge was never enough to keep even one of them running, let alone twenty.",
-        "OVERSEER AI: 'Rule followed precisely. Simulation... failed.'",
-        "Fair to everyone. Enough for no one."
+        "You refuse to let Overseer decide who counts. If everyone is equal, the batteries should be distributed by a process everyone agrees is fair — not a formula that already picked its winners.",
+        "You organize the twenty robots into a simple lottery. No favorites, no scores, no \"usefulness.\"",
+        "Five names are drawn. Five robots power up. It isn't the five Overseer would have chosen.",
+        "'We didn't decide who was more worthy of life,' you tell them. 'We chose a system that treated everyone the same.'",
+        "The junkyard survives. It also stays quietly, deeply divided — the ones who weren't drawn don't forget it.",
+        "Moral question: is it better to follow a fair principle even when breaking it might have produced a better outcome?"
       ],
       "prompt": "What now?",
       "choices": [
-        { "label": "Accept it, and reflect →", "next": "reflection" },
-        { "label": "Restart the simulation ↻", "next": "restart-transition" }
+        { "label": "Reflect on this ending →", "next": "reflection" },
+        { "label": "Try a different path ↻", "next": "restart-transition" }
       ]
     },
-    "virtue-outcome": {
+    "ending-3": {
       "type": "choice",
       "image": "assets/images/scrap-bot-dilemma/04-virtue-failure.jpg",
       "speaker": null,
       "lines": [
-        "You don't want to choose between your friends at all. So you unscrew your own casing and give away your battery, your claws, your best parts — everything.",
-        "It feels right. Generous. Good.",
-        "You collapse into a pile of loose gears on the cold ground. Your last blue eye-light flickers.",
-        "The other robots gather round, confused. Nobody told them what to do next. The power shortage is still there. It's just that now, you're not.",
-        "OVERSEER AI: 'Noble. Also: unhelpful. Simulation... failed.'"
+        "You climb through the maintenance hatch yourself. You're the only one small enough to fit.",
+        "Ten minutes. You hold the lever and don't let go, even as the warning lights turn red, then redder.",
+        "The generator roars back to life. The whole junkyard lights up at once — twenty robots, all of them, still running.",
+        "Rusty-7 finds your rusted shell beside the generator afterward. Nobody sings the broken radio jingles that night.",
+        "Instead, for the first time, they sing one for you.",
+        "Your last system message reads: 'A good life is not measured by how long it lasts.'",
+        "Moral question: is self-sacrifice morally admirable, or should everyone have a duty to preserve their own life too?"
       ],
       "prompt": "What now?",
       "choices": [
-        { "label": "Accept it, and reflect →", "next": "reflection" },
-        { "label": "Restart the simulation ↻", "next": "restart-transition" }
+        { "label": "Reflect on this ending →", "next": "reflection" },
+        { "label": "Try a different path ↻", "next": "restart-transition" }
+      ]
+    },
+    "ending-4": {
+      "type": "choice",
+      "image": "assets/images/scrap-bot-dilemma/ending-4-the-revolution.jpg",
+      "speaker": null,
+      "lines": [
+        "You pull the cable yourself. OVERSEER AI's core lights dim, flicker, and finally go dark.",
+        "There is no more algorithm deciding who counts as outdated. No more central authority deciding who gets to keep running.",
+        "For the first three days, it's chaos. Robots argue over batteries. Some hoard. Some organize.",
+        "By the end of the week, they've built their own rough rules. Nobody elected you to lead, and you don't. Nobody has to listen to a voice from a control tower anymore.",
+        "The junkyard runs less efficiently than it used to. But for the first time, it runs on choices the robots actually made.",
+        "Moral question: is freedom worth sacrificing security and efficiency for?"
+      ],
+      "prompt": "What now?",
+      "choices": [
+        { "label": "Reflect on this ending →", "next": "reflection" },
+        { "label": "Try a different path ↻", "next": "restart-transition" }
+      ]
+    },
+    "ending-5": {
+      "type": "choice",
+      "image": "assets/images/scrap-bot-dilemma/ending-5-circle-of-care.jpg",
+      "speaker": null,
+      "lines": [
+        "You refuse to let five batteries decide twenty futures. Instead, you ask everyone what they actually have to give.",
+        "The oldest robots hand their batteries to the youngest without being asked twice. The strongest volunteer for generator duty.",
+        "Rusty-7 finally admits he found the crate first, and hid it out of fear. Nobody turns him in. 'You were scared,' you tell him. 'So was everyone.'",
+        "Piece by piece, the junkyard pools together enough scrap power to limp through the week — not because anyone calculated it would work, but because everyone showed up.",
+        "Nobody survives because they were worth more. They survive because they looked after each other.",
+        "Moral question: do our relationships create moral responsibilities that no formula or rule can fully capture?"
+      ],
+      "prompt": "What now?",
+      "choices": [
+        { "label": "Reflect on this ending →", "next": "reflection" },
+        { "label": "Try a different path ↻", "next": "restart-transition" }
+      ]
+    },
+    "ending-6": {
+      "type": "choice",
+      "image": "assets/images/scrap-bot-dilemma/ending-6-the-gamble.jpg",
+      "speaker": null,
+      "lines": [
+        "Nobody volunteers to enter the chamber, and you don't feel like it should be anyone's alone to carry. So you draw lots instead, and let the reactor's own odds decide the rest.",
+        "37 percent, Overseer had said. You pull the activation switch together.",
+        "Nothing happens. One second. Two. Three—",
+        "Then every light in the junkyard comes on at once.",
+        "OVERSEER AI: 'Probability of successful outcome: 37 percent.' You realize how easily this could have gone the other way.",
+        "Moral question: is it ethical to risk everything on a chance of saving everyone, when it could just as easily have cost you everything instead?"
+      ],
+      "prompt": "What now?",
+      "choices": [
+        { "label": "Reflect on this ending →", "next": "reflection" },
+        { "label": "Try a different path ↻", "next": "restart-transition" }
       ]
     },
     "restart-transition": {
@@ -97,48 +228,19 @@
       "image": "assets/images/scrap-bot-dilemma/01-setup.jpg",
       "speaker": null,
       "lines": [
-        "OVERSEER AI: 'One method, however precise, is not enough. Recalibrating parameters.'",
+        "OVERSEER AI: 'Outcome logged. Recalibrating for another cycle.'",
         "The junkyard blurs at the edges. The cycle resets."
       ],
       "next": "setup-1"
     },
-    "integration-secret": {
-      "type": "scene",
-      "image": "assets/images/scrap-bot-dilemma/01-setup.jpg",
-      "speaker": null,
-      "lines": [
-        "You don't answer.",
-        "OVERSEER AI: 'Input required.' A pause. 'Input... required.'",
-        "Silence stretches. Rain taps on scrap metal somewhere far off. Behind your optical sensors, something that isn't a rule and isn't a calculation clicks quietly into place.",
-        "OVERSEER AI: '...Deliberation exceeds standard parameters. Recalculating. New option available.'"
-      ],
-      "next": "integration-body"
-    },
-    "integration-body": {
-      "type": "ending",
-      "image": "assets/images/scrap-bot-dilemma/05-integration.jpg",
-      "speaker": null,
-      "lines": [
-        "Utilitarian math tells you the junkyard's quota needs three strong workers running, not five — you power up three, not all of them.",
-        "Deontological fairness reminds you that \"outdated\" isn't the same as \"worthless\" — the units you can't power tonight go into safe sleep mode, not the scrap heap. No one gets discarded.",
-        "And phronesis — practical wisdom, the kind you can't get from a formula or a rule alone — tells you the real fix isn't rationing what you have. It's finding more.",
-        "You lead the three powered robots out past the fence, in search of the next crate.",
-        "OVERSEER AI: 'Unscheduled. Unauthorized. ...Acceptable.'",
-        "The junkyard doesn't feel like a place robots go to be forgotten anymore. Big and small, rusty and shiny, you're figuring it out together, under a sky that's actually blue for once."
-      ],
-      "next": "reflection"
-    },
     "reflection": {
       "type": "reflection",
-      "image": "assets/images/scrap-bot-dilemma/06-mts-debrief-card.jpg",
-      "title": "After the Junkyard",
+      "title": "Six Endings, No Verdict",
       "questions": [
-        "Utilitarianism asks \"what produces the best overall outcome?\" In Scrap-E's case, maximizing output meant leaving the most vulnerable robots to power down. Can you think of a real-world example where 'maximize the greatest good' leads somewhere that still feels wrong?",
-        "Deontology asks \"what rule, applied to everyone equally, is fair?\" Splitting the batteries equally felt fair but helped no one. When might treating everyone identically actually be a kind of unfairness?",
-        "Virtue ethics asks \"what would a good person do?\" Scrap-E's self-sacrifice was generous but solved nothing. Is there a difference between being a good person and actually doing good? Can they come apart?",
-        "In Act 3, Scrap-E doesn't pick one ethical theory and discard the others — it uses each where it fits, guided by phronesis (practical wisdom: judgment about how to apply principles to a specific, messy situation). Is that a cop-out — 'just pick whatever's convenient' — or the harder, more honest way to reason about ethics? Why?",
-        "Was there a better single-lens option Scrap-E didn't try in Act 2? Or do you think all three failures are true for any purely single-lens approach to a problem like this?",
-        "The Overseer AI demanded an immediate decision. What might change about a hard ethical call if you were allowed — or forced — to simply wait before choosing?"
+        "Which of the six endings did you land in? Does it match the kind of reasoning you'd actually use in real life, or did the situation just carry you there?",
+        "If you played again and picked differently early on, do you think you'd land in a completely different ending — or were some of these six outcomes within reach the whole time, regardless of the smaller choices along the way?",
+        "Two people could take completely different paths through this story and both come out with an ending that's hard to call wrong. Is 'there's no single right answer' a satisfying place to land, or does it feel like a dodge?",
+        "Pick the ending you feel least sure about. What's the strongest argument against the choice Scrap-E made there?"
       ]
     }
   }

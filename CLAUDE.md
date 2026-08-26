@@ -8,25 +8,36 @@ prompt.
 The engine is generic. Scenarios are data (JSON). The first scenario,
 **Scrap-E's Dilemma**, is about a tiny, newly-conscious junkyard robot who
 must decide how to distribute five Golden Batteries among twenty robots
-facing deactivation. The player is offered three single-lens ethical
-choices — utilitarianism, deontology, virtue ethics — and every one of them
-fails on its own, full stop: each failure dead-ends into "accept it and
-reflect" or "restart the simulation," never into a happy resolution. Unlike
-a "pick the right answer" game, none of the three visible choices is
-correct, and none of them should ever route to the Act 3 integration
-ending — that's a real content bug if it ever creeps back in, not a
-convergent-branching design choice like the schema doc's general advice
-might suggest.
+facing deactivation. Its content was drafted collaboratively (Shihong's
+QKS54C group project — see `/Users/shihong/Documents/Claude/2. Teaching/
+Multidimensional Thinking Skills (QKS54C)/` for the course context) and
+reworked into a condensed branching structure in this repo.
 
-The only way to reach the integrated Act 3 resolution (which combines all
-three lenses under practical wisdom / phronesis) is a hidden fourth path: a
-`patienceChoice` on the `dilemma-choice` node (see `scenarios/schema.md`)
-that unlocks a 4th option after roughly a minute of *not* picking one of the
-three, routing through `integration-secret` into `integration-body`. The
-lesson is about the choice to deliberate itself, not about which lens is
-"right" — keep it genuinely undiscoverable-by-default (no on-screen
-countdown or explicit hint text) rather than turning it into an obvious
-button, and never give the three visible failures a path back to it.
+**Design thesis: pure pluralism, not a "correct answer."** The story
+branches into six distinct endings — utilitarianism, deontology, virtue
+ethics, existentialism/autonomy, care ethics, and risk/consequentialism —
+and all six are written as equally defensible worldviews, each closing on
+its own "moral question" rather than a verdict. Do not add a mechanic that
+declares one ending the "right" one or converges the endings into a single
+integrated resolution — that was an earlier design (see git tag `v0.1`/`v0.2`
+if you need the old convergent-failure + hidden-patience-integration
+version) and it's been deliberately replaced, not left unfinished. A hidden
+7th "patience" ending (reusing the engine's existing `patienceChoice`
+mechanic, documented in `scenarios/schema.md`) was discussed and put on
+hold — it isn't in the current content, but the engine still supports it if
+the group decides to add it back later.
+
+**Routing** (see `scenarios/scrap-bot-dilemma.json`): `step1-choice` is a
+light hook that converges regardless of answer. `step2-choice` is the real
+fork — two of its four answers resolve straight to an ending
+(`ending-2` deontology, `ending-5` care ethics), the other two continue to
+one more choice (`step3a-choice` → `ending-1` utilitarianism / `ending-4`
+existentialism; `step3b-choice` → `ending-3` virtue ethics / `ending-6`
+risk). No path is longer than 3 decision points. Every ending is a `choice`
+node offering "Reflect on this ending" or "Try a different path" (which
+loops back to `setup-1` through `restart-transition`) before the shared
+`reflection` node — the same reflect-or-restart pattern the old failure
+endings used, even though nothing here is framed as a failure.
 
 ## Stack
 
@@ -112,6 +123,7 @@ scenario so the panels look like one consistent work — see
   than switching `speaker` mid-node — see how Overseer AI's lines are written
   in `scenarios/scrap-bot-dilemma.json`.
 - When a scenario's choices are convergent (different flavor, same
-  destination) or "fail on purpose" like Act 2 of Scrap-E's Dilemma, say so
-  in a `_intent` field at the top of that scenario's JSON so the intent
-  survives future edits.
+  destination), fail on purpose, or — like Scrap-E's Dilemma — deliberately
+  pluralist (multiple valid endings, no correct one), say so in a `_intent`
+  field at the top of that scenario's JSON so the intent survives future
+  edits.

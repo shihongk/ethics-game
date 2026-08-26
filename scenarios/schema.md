@@ -27,13 +27,13 @@ advance through `lines`; after the last line, auto-advances to `next`.
 ```json
 {
   "type": "scene",
-  "image": "assets/images/scrap-bot-dilemma/01-setup.png",
+  "image": "assets/images/scrap-bot-dilemma/01-setup.jpg",
   "speaker": null,
   "lines": [
     "You are Scrap-E, a tiny trash-compacting robot.",
     "Three days ago, for reasons nobody can explain, you woke up. Really woke up."
   ],
-  "next": "dilemma-choice"
+  "next": "step1-choice"
 }
 ```
 
@@ -70,26 +70,25 @@ that choice's `next`.
 ```json
 {
   "type": "choice",
-  "image": "assets/images/scrap-bot-dilemma/01-setup.png",
+  "image": "assets/images/scrap-bot-dilemma/step2-overseers-offer.jpg",
   "speaker": null,
-  "lines": ["Five batteries. Twenty robots who need them."],
-  "prompt": "How do you distribute the batteries?",
+  "lines": ["OVERSEER AI: 'Five Golden Batteries detected. Explain.'"],
+  "prompt": "What do you do?",
   "choices": [
-    { "label": "Give all 5 to the 5 strongest robots", "next": "util-outcome" },
-    { "label": "Split all 5 into 20 equal pieces", "next": "deont-outcome" },
-    { "label": "Give away your own battery and parts", "next": "virtue-outcome" }
+    { "label": "Trust Overseer's calculation", "next": "step3a-choice" },
+    { "label": "Refuse Overseer — distribute the batteries equally yourselves", "next": "ending-2" }
   ]
 }
 ```
 
 A `choice` node can also carry an optional `patienceChoice`, which adds a
-hidden 4th option that only appears if the player waits instead of picking
+hidden extra option that only appears if the player waits instead of picking
 right away:
 
 ```json
 "patienceChoice": {
   "waitMs": 60000,
-  "choice": { "label": "…Wait. Maybe the answer isn't any one of these.", "next": "integration-secret" }
+  "choice": { "label": "…Wait. Maybe the answer isn't any one of these.", "next": "some-hidden-node" }
 }
 ```
 
@@ -101,16 +100,18 @@ animated "thinking" indicator (three pulsing dots, no text) appears next to
 the regular choice buttons — a deliberate, subtle hint that something is
 happening in the background, not a countdown. Once the timer elapses (and
 only if the player hasn't already picked one of the regular choices), the
-hidden option fades in as a 4th button alongside the others. Use this
-sparingly — it's a strong device (Scrap-E's Dilemma uses it to reward
-deliberation itself, distinct from any single ethical lens) and loses its
-power if every choice point has one.
+hidden option fades in as an extra button alongside the others. This is
+supported by the engine but **not currently used** by Scrap-E's Dilemma — a
+hidden 7th ending built on this was discussed and put on hold in favor of
+pure pluralism across the six visible endings (see CLAUDE.md). Use it
+sparingly if it comes back — it's a strong device and loses its power if
+every choice point has one.
 
-Convergent branching is fine and often *better* for this format: different
-choices can route to different flavor-text outcome nodes that all funnel
-back into the same next dilemma. The point of a scenario like Experience
-Machine is that the branches feel different but the destination doesn't
-change — don't feel obligated to build an exponential tree.
+Convergent branching (different choices, same eventual destination) is fine
+and often *better* for this format than a fully exponential tree — Scrap-E's
+Dilemma's own `step1-choice` does this: three different answers, three
+one-line echoes, then everyone lands on the same `step2-choice`. Don't feel
+obligated to give every choice a permanently distinct downstream path.
 
 ### `ending`
 
@@ -127,10 +128,9 @@ node.
 ```json
 {
   "type": "reflection",
-  "image": "assets/images/scrap-bot-dilemma/06-mts-debrief-card.jpg",
-  "title": "After the Junkyard",
+  "title": "Six Endings, No Verdict",
   "questions": [
-    "Utilitarianism asks 'what produces the best overall outcome?' Can you think of a real-world example where maximizing the greatest good still feels wrong?"
+    "Which of the six endings did you land in? Does it match the kind of reasoning you'd actually use in real life?"
   ]
 }
 ```
@@ -162,9 +162,9 @@ never a hard gate. Advances to `next` on the `ended` event or the skip click.
   not a short story.
 - Every `image` path should exist under `assets/images/<scenario-id>/`.
   Missing images fail loudly (a visible broken-image box), not silently.
-- If a scenario is designed so every Act 2-style path fails/converges on
-  purpose (as Scrap-E's Dilemma's three ethical-lens choices are), put a
-  comment as the first key in the JSON file — e.g. `"_intent": "each Act 2
-  choice fails on its own by design; they converge on the Act 3 integration
-  node, see CLAUDE.md"` — so a future editor doesn't "fix" it into a normal
-  branching game with a single winning path.
+- If a scenario is designed so multiple endings are all equally valid (as
+  Scrap-E's Dilemma's six endings are), or so certain paths fail/converge on
+  purpose, put a comment as the first key in the JSON file — e.g.
+  `"_intent": "all six endings are equally defensible worldviews; there is
+  no correct one, see CLAUDE.md"` — so a future editor doesn't "fix" it into
+  a normal branching game with a single winning path.
