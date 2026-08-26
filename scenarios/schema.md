@@ -119,6 +119,18 @@ Same shape as `scene`, but its `next` should point at a `reflection` node
 rather than more story. Use this to mark "the story part is over" clearly
 even though mechanically it behaves like `scene`.
 
+If you want the player to choose between continuing to reflection or
+restarting for another attempt (as every ending in Scrap-E's Dilemma does),
+author it as a `choice` node instead, with one choice's `next` pointing at
+your `reflection` node and another's at a restart-transition scene that
+loops back to `start`. A `choice` node used this way can carry an optional
+`endingTitle` string — the engine records it when the player reaches either
+of those two choices, and the reflection screen's "Review your paths" modal
+uses it to label that attempt (e.g. "Attempt 2 — The Circle of Care (Care
+Ethics)"). Choices whose `next` is literally `"reflection"` or
+`"restart-transition"` are never added to the visible choice-path list
+itself — they close out an attempt rather than being a step within it.
+
 ### `reflection`
 
 No image sequence. A title, optional intro lines, and a list of open-ended

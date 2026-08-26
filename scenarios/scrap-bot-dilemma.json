@@ -69,7 +69,7 @@
       "speaker": null,
       "lines": [
         "OVERSEER AI: 'Five Golden Batteries detected. Explain.'",
-        "There's no point denying it now. The AI already knows.",
+        "There's no point denying it now. The Overseer already knows.",
         "OVERSEER AI: 'I can redistribute them according to optimal survival probability. Five units, preserved. Give me the batteries.'",
         "Then, almost as an afterthought: 'Alternatively — the generator. If restarted, it could power everyone. The odds are... not favorable.'"
       ],
@@ -116,6 +116,7 @@
     },
     "ending-1": {
       "type": "choice",
+      "endingTitle": "The Greatest Good (Utilitarianism)",
       "image": "assets/images/scrap-bot-dilemma/02-utilitarian-failure.jpg",
       "speaker": null,
       "lines": [
@@ -134,6 +135,7 @@
     },
     "ending-2": {
       "type": "choice",
+      "endingTitle": "Nobody Is Expendable (Deontology)",
       "image": "assets/images/scrap-bot-dilemma/ending-2-nobody-expendable.jpg",
       "speaker": null,
       "lines": [
@@ -152,6 +154,7 @@
     },
     "ending-3": {
       "type": "choice",
+      "endingTitle": "The Scrap-E Sacrifice (Virtue Ethics)",
       "image": "assets/images/scrap-bot-dilemma/04-virtue-failure.jpg",
       "speaker": null,
       "lines": [
@@ -171,6 +174,7 @@
     },
     "ending-4": {
       "type": "choice",
+      "endingTitle": "The Revolution (Existentialism / Autonomy)",
       "image": "assets/images/scrap-bot-dilemma/ending-4-the-revolution.jpg",
       "speaker": null,
       "lines": [
@@ -189,6 +193,7 @@
     },
     "ending-5": {
       "type": "choice",
+      "endingTitle": "The Circle of Care (Care Ethics)",
       "image": "assets/images/scrap-bot-dilemma/ending-5-circle-of-care.jpg",
       "speaker": null,
       "lines": [
@@ -207,6 +212,7 @@
     },
     "ending-6": {
       "type": "choice",
+      "endingTitle": "The Gamble (Risk / Consequentialism)",
       "image": "assets/images/scrap-bot-dilemma/ending-6-the-gamble.jpg",
       "speaker": null,
       "lines": [
@@ -239,6 +245,7 @@
       "questions": [
         "Which of the six endings did you land in? Does it match the kind of reasoning you'd actually use in real life, or did the situation just carry you there?",
         "If you played again and picked differently early on, do you think you'd land in a completely different ending — or were some of these six outcomes within reach the whole time, regardless of the smaller choices along the way?",
+        "Small confession: however you answered \"Do you tell anyone?\" back at Step 1, you ended up here regardless. Now that you know, does that drain the choice of meaning — or does it say something real about how often a decision can feel high-stakes in the moment while the outcome never actually traces back to it?",
         "Two people could take completely different paths through this story and both come out with an ending that's hard to call wrong. Is 'there's no single right answer' a satisfying place to land, or does it feel like a dodge?",
         "Pick the ending you feel least sure about. What's the strongest argument against the choice Scrap-E made there?"
       ]

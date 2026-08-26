@@ -12,8 +12,23 @@
     nodeEnteredAt: 0,
     patienceRevealed: false,
     patienceTimerStarted: false,
-    patienceTimerId: null
+    patienceTimerId: null,
+    choiceHistory: [],
+    attempts: []
   };
+
+  function recordChoice(label, nextNodeId) {
+    if (nextNodeId === "reflection" || nextNodeId === "restart-transition") {
+      var endingNode = currentNode();
+      state.attempts.push({
+        endingTitle: (endingNode && endingNode.endingTitle) || state.nodeId,
+        choices: state.choiceHistory.slice()
+      });
+      state.choiceHistory = [];
+      return;
+    }
+    state.choiceHistory.push(label);
+  }
 
   function estimatedReadMs(lines) {
     var words = (lines || []).join(" ").trim().split(/\s+/).filter(Boolean).length;
@@ -162,6 +177,7 @@
       (node.choices || []).forEach(function (choice) {
         var btn = el("button", "btn-choice", choice.label);
         btn.addEventListener("click", function () {
+          recordChoice(choice.label, choice.next);
           goTo(choice.next);
         });
         controls.appendChild(btn);
@@ -170,6 +186,7 @@
         if (state.patienceRevealed) {
           var secretBtn = el("button", "btn-choice btn-choice-secret", node.patienceChoice.choice.label);
           secretBtn.addEventListener("click", function () {
+            recordChoice(node.patienceChoice.choice.label, node.patienceChoice.choice.next);
             goTo(node.patienceChoice.choice.next);
           });
           controls.appendChild(secretBtn);
@@ -235,6 +252,49 @@
     app.appendChild(panel);
   }
 
+  function showPathModal() {
+    var dialog = document.createElement("dialog");
+    dialog.className = "path-modal";
+
+    dialog.appendChild(el("h2", "", "Your paths so far"));
+
+    if (state.attempts.length) {
+      var wrap = el("div", "path-attempts");
+      state.attempts.forEach(function (attempt, index) {
+        var block = el("div", "path-attempt");
+        block.appendChild(el("div", "path-attempt-title", "Attempt " + (index + 1) + " — " + attempt.endingTitle));
+        var list = document.createElement("ol");
+        list.className = "path-list";
+        attempt.choices.forEach(function (label) {
+          list.appendChild(el("li", "", label));
+        });
+        block.appendChild(list);
+        wrap.appendChild(block);
+      });
+      dialog.appendChild(wrap);
+    } else {
+      dialog.appendChild(el("p", "", "No completed runs yet."));
+    }
+
+    function closeModal() {
+      dialog.close();
+      dialog.remove();
+    }
+
+    var closeBtn = el("button", "btn-next", "Close");
+    closeBtn.addEventListener("click", closeModal);
+    dialog.appendChild(closeBtn);
+
+    dialog.addEventListener("click", function (e) {
+      var box = dialog.getBoundingClientRect();
+      var inside = e.clientX >= box.left && e.clientX <= box.right && e.clientY >= box.top && e.clientY <= box.bottom;
+      if (!inside) closeModal();
+    });
+
+    document.body.appendChild(dialog);
+    dialog.showModal();
+  }
+
   function renderReflection(node) {
     app.innerHTML = "";
     app.appendChild(el("h1", "game-title", state.scenario.title));
@@ -246,7 +306,14 @@
     }
 
     var box = el("div", "reflection");
-    box.appendChild(el("h2", "", node.title || "Reflect"));
+    var headRow = el("div", "reflection-head");
+    headRow.appendChild(el("h2", "", node.title || "Reflect"));
+    var reviewBtn = el("button", "btn-review", "🗺 Review your paths");
+    reviewBtn.addEventListener("click", function () {
+      showPathModal();
+    });
+    headRow.appendChild(reviewBtn);
+    box.appendChild(headRow);
 
     var answers = loadReflectionAnswers();
 
@@ -301,6 +368,13 @@
         app.appendChild(el("p", "", "If you're opening this file directly (file://), run a local server instead — see CLAUDE.md."));
       });
   }
+
+  window.addEventListener("beforeunload", function (e) {
+    if (state.attempts.length || state.choiceHistory.length) {
+      e.preventDefault();
+      e.returnValue = "";
+    }
+  });
 
   boot();
 })();
