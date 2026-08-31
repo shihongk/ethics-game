@@ -133,27 +133,40 @@ itself — they close out an attempt rather than being a step within it.
 
 ### `reflection`
 
-No image sequence. A title, optional intro lines, and a list of open-ended
-questions. No right answers, no branching, no `next` — this is the last
-node.
+The closing screen. No branching, no `next` — this is the last node. As of
+v0.5 it's a short hand-off rather than an in-app Q&A form: a `title` and one
+`message` pointing the student at wherever the real reflection happens
+(slides, an LMS, a Google Form — whatever the course actually uses).
 
 ```json
 {
   "type": "reflection",
-  "title": "Six Endings, No Verdict",
-  "questions": [
-    "Which of the six endings did you land in? Does it match the kind of reasoning you'd actually use in real life?"
-  ]
+  "title": "Before You Go",
+  "message": "You've reached the end of Scrap-E's Dilemma. Your next stop is the slides — that's where you'll find the link to reflect on it."
 }
 ```
 
-`image` is optional — if present, it renders as decorative header art above
-the questions (not a sequential `scene`-style panel; no lines, no click-to-
-advance). Omit it for a plain text reflection screen.
+`image` is still optional — if present, it renders as decorative header art
+above the message. `message` is plain text rendered as one paragraph — no
+HTML or markdown is parsed (it's set via `textContent`, so e.g. `<strong>`
+would show up as literal angle brackets, not bold). Keep it to one short
+paragraph; this screen is a hand-off, not a place to read prose.
 
-The engine renders each question with an optional textarea. If the student
-types an answer, it's saved to `localStorage['ethics-game:<scenario-id>']`
-on blur — nothing is sent anywhere. A "Restart" button resets the run.
+The screen also always renders a **"🗺 Review your paths"** button (opens a
+modal listing every attempt the student has made this session — the
+choices for each, grouped and labeled by the `endingTitle` of whichever
+ending that attempt reached) and a **"Restart ↻"** button. Neither of these
+needs any node-level configuration; they're driven by `state.attempts`,
+which every ending's own choices populate automatically (see the `ending`
+section above) regardless of what a given scenario's `reflection` node
+contains. Nothing here touches `localStorage` — path history is in-memory
+only for the current page load, which is why a `beforeunload` prompt warns
+before a refresh would lose it.
+
+If your scenario used to ask reflection questions in-app and you're moving
+them out (as Scrap-E's Dilemma did in v0.5), don't just delete them — save
+them to a sibling file like `scrap-bot-dilemma-reflection-questions.md` so
+whoever builds the external reflection form still has the actual content.
 
 ### `video` (supported, unused so far)
 

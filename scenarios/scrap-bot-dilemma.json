@@ -241,14 +241,8 @@
     },
     "reflection": {
       "type": "reflection",
-      "title": "Six Endings, No Verdict",
-      "questions": [
-        "Which of the six endings did you land in? Does it match the kind of reasoning you'd actually use in real life, or did the situation just carry you there?",
-        "If you played again and picked differently early on, do you think you'd land in a completely different ending — or were some of these six outcomes within reach the whole time, regardless of the smaller choices along the way?",
-        "Small confession: however you answered \"Do you tell anyone?\" back at Step 1, you ended up here regardless. Now that you know, does that drain the choice of meaning — or does it say something real about how often a decision can feel high-stakes in the moment while the outcome never actually traces back to it?",
-        "Two people could take completely different paths through this story and both come out with an ending that's hard to call wrong. Is 'there's no single right answer' a satisfying place to land, or does it feel like a dodge?",
-        "Pick the ending you feel least sure about. What's the strongest argument against the choice Scrap-E made there?"
-      ]
+      "title": "Before You Go",
+      "message": "You've reached the end of Scrap-E's Dilemma. Your next stop is the slides — that's where you'll find the link to reflect on it."
     }
   }
 }

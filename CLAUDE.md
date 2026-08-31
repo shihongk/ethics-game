@@ -87,9 +87,12 @@ has a `type` and a `next` (or `choices` for branch points). Node types:
   different node ids
 - `ending` — like `scene`, but routes into a `reflection` node instead of
   more story
-- `reflection` — open-ended discussion questions, no branching; optional
-  textarea per question, answers persist to `localStorage` only (no backend,
-  nothing leaves the browser)
+- `reflection` — the closing screen. As of v0.5 this is a short hand-off
+  (a `title` + one `message`) pointing the student at wherever the real
+  reflection happens (slides/LMS/etc.), not an in-app Q&A form — see
+  `scenarios/scrap-bot-dilemma-reflection-questions.md` for the questions
+  that used to live here. It also surfaces the "Review your paths" button
+  (see Conventions below)
 - `video` — supported by the engine (embeds an HTML5 `<video>`, advances on
   end or a skip click) but unused so far since no video asset exists; wire
   one in by making it the `start` node
@@ -113,10 +116,15 @@ scenario so the panels look like one consistent work — see
 
 ## Conventions
 
-- No student data leaves the browser. Reflection answers go to
-  `localStorage` under a per-scenario key; there is no backend and none
-  should be added without checking with the user first (this is meant for
-  classroom use, not data collection).
+- No student data leaves the browser, and as of v0.5 nothing persists to
+  `localStorage` either — the engine keeps zero storage of any kind. The
+  reflection questions themselves now live outside the app entirely (on
+  the slides/LMS), and the "Review your paths" feature (every choice made
+  this session, grouped by attempt, shown in a modal on the closing screen)
+  is in-memory only: it survives restarts within a session but is lost on
+  page refresh, which a `beforeunload` prompt warns about. There is no
+  backend and none should be added without checking with the user first
+  (this is meant for classroom use, not data collection).
 - Keep node `lines` short — this is meant to read like chat/comic dialogue,
   not prose paragraphs. 1–3 sentences per line. Dialogue from a named
   character can be embedded as `NAME: '...'` inside a narration line rather

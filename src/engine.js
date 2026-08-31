@@ -40,29 +40,6 @@
     return params.get("scenario") || DEFAULT_SCENARIO;
   }
 
-  function storageKey() {
-    return "ethics-game:" + state.scenario.id;
-  }
-
-  function loadReflectionAnswers() {
-    try {
-      var raw = localStorage.getItem(storageKey());
-      return raw ? JSON.parse(raw) : {};
-    } catch (e) {
-      return {};
-    }
-  }
-
-  function saveReflectionAnswer(index, value) {
-    try {
-      var answers = loadReflectionAnswers();
-      answers[index] = value;
-      localStorage.setItem(storageKey(), JSON.stringify(answers));
-    } catch (e) {
-      /* localStorage unavailable (private browsing etc) — degrade silently */
-    }
-  }
-
   function el(tag, className, text) {
     var node = document.createElement(tag);
     if (className) node.className = className;
@@ -307,7 +284,7 @@
 
     var box = el("div", "reflection");
     var headRow = el("div", "reflection-head");
-    headRow.appendChild(el("h2", "", node.title || "Reflect"));
+    headRow.appendChild(el("h2", "", node.title || "Before You Go"));
     var reviewBtn = el("button", "btn-review", "🗺 Review your paths");
     reviewBtn.addEventListener("click", function () {
       showPathModal();
@@ -315,29 +292,12 @@
     headRow.appendChild(reviewBtn);
     box.appendChild(headRow);
 
-    var answers = loadReflectionAnswers();
+    if (node.message) {
+      box.appendChild(el("p", "handoff-copy", node.message));
+    }
 
-    (node.questions || []).forEach(function (question, index) {
-      var qWrap = el("div", "reflection-q");
-      qWrap.appendChild(el("p", "", question));
-      var textarea = document.createElement("textarea");
-      textarea.placeholder = "Write your thoughts here (saved only on this device)...";
-      textarea.value = answers[index] || "";
-      var savedNote = el("span", "saved-note", "Saved");
-      textarea.addEventListener("blur", function () {
-        saveReflectionAnswer(index, textarea.value);
-        savedNote.classList.add("show");
-        setTimeout(function () {
-          savedNote.classList.remove("show");
-        }, 1200);
-      });
-      qWrap.appendChild(textarea);
-      qWrap.appendChild(savedNote);
-      box.appendChild(qWrap);
-    });
-
-    var footer = el("div", "reflection-footer");
-    footer.appendChild(el("span", "", "The End"));
+    var footer = el("div", "again-row");
+    footer.appendChild(el("span", "", "Want to see a different ending first?"));
     var restartBtn = el("button", "btn-restart", "Restart ↻");
     restartBtn.addEventListener("click", function () {
       goTo(state.scenario.start);

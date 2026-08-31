@@ -441,50 +441,31 @@ button:active { transform: scale(0.98); }
   line-height: 1.5;
 }
 
-.reflection-q {
-  margin: 20px 0;
+.handoff-copy {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  margin: 18px 0 26px;
+  max-width: 60ch;
 }
 
-.reflection-q p {
-  font-weight: 700;
-  margin-bottom: 8px;
-  line-height: 1.5;
+.handoff-copy strong {
+  color: var(--amber-deep);
 }
 
-.reflection-q textarea {
-  width: 100%;
-  min-height: 70px;
-  font-family: inherit;
-  font-size: 0.95rem;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--cream-deep);
-  background: var(--cream);
-  color: var(--ink);
-  resize: vertical;
-}
-
-.reflection-q textarea:focus {
-  outline: 2px solid var(--amber);
-  outline-offset: 1px;
-}
-
-.reflection-footer {
-  margin-top: 24px;
+.again-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid var(--cream-deep);
+  flex-wrap: wrap;
 }
 
-.saved-note {
-  font-size: 0.8rem;
-  color: var(--moss);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+.again-row span {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
 }
-
-.saved-note.show { opacity: 1; }
 
 .btn-restart {
   background: var(--moss);
