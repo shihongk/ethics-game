@@ -317,6 +317,7 @@
       })
       .then(function (scenario) {
         state.scenario = scenario;
+        document.title = scenario.title;
         var params = new URLSearchParams(window.location.search);
         var startNode = params.get("node") || scenario.start;
         goTo(startNode);
